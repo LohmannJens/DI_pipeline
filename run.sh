@@ -31,7 +31,7 @@ accnums=("SRR8754513" "SRR8754514" "SRR8754527" "SRR8754538" \
 ### unordered time series data
 
 
-experiment=Mendes2020
+experiment=Mendes2021
 accnums=("SRR15720481" "SRR15720482" "SRR15720483")
 ### 1, 2, 3 is three libraries
 
