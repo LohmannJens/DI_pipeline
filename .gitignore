@@ -2,7 +2,6 @@
 
 data/raw_fastq
 FastQC
-results
 seqtk
 Trimmomatic-0.39
 work
