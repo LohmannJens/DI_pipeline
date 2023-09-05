@@ -24,7 +24,7 @@ print 'ViReMa Version 0.9 - written by Andrew Routh'
 print 'Last modified 31/01/2014'
 print '-------------------------------------------------------------------------------------------'
 ##      ----------------------------------------------------------------------------------------
-
+import os
 import time
 start = time.time()
 from subprocess import call
