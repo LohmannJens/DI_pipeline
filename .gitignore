@@ -1,6 +1,6 @@
 .nextflow*
 
-data
+data/raw_fastq
 FastQC
 results
 seqtk
