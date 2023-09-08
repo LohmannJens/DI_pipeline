@@ -6,7 +6,7 @@
 experiment=$1
 accnum=$2
 
-infile=results/${experiment}/virema/${accnum}_unaligned_Virus_Recombination_Results.par
+infile=results/${experiment}/virema/${accnum}both_unaligned_Virus_Recombination_Results.par
 directory=results/${experiment}/final/
 if [ ! -d $directory ]; then
     mkdir -p $directory
