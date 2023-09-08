@@ -36,6 +36,8 @@ from os import makedirs
 from os.path import exists
 import sys
 
+import gc
+
 ##      -------------------------------------------------------------------------------------------
 ##      Take arguments from command line, and send them to the config file for cross-module access
 ##      -------------------------------------------------------------------------------------------
@@ -457,6 +459,10 @@ def IterateAlignments(File):
             Alignment('TEMPREADS', '-q', cfgvars.Seed)
             ReadsRemaining = Countreads('TEMPREADS', 'Q')
             print "%s reads remaining to be aligned after %s iterations." % (ReadsRemaining, n)
+            
+            # garbage collection
+            os.remove('TEMPREADS')
+            gc.collect()
     
 ##      ----------------------------------------------------------------------------------------
 ##      ReportResults() Analyses the results from all the Bowtie calls and collates all the results 
