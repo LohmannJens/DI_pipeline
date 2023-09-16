@@ -19,10 +19,10 @@
 ##      THE SOFTWARE.
 ##
 ##      ----------------------------------------------------------------------------------------
-print '\n-------------------------------------------------------------------------------------------'
-print 'ViReMa Version 0.9 - written by Andrew Routh'
-print 'Last modified 31/01/2014'
-print '-------------------------------------------------------------------------------------------'
+print('\n-------------------------------------------------------------------------------------------')
+print('ViReMa Version 0.9 - written by Andrew Routh')
+print('Last modified 31/01/2014')
+print('-------------------------------------------------------------------------------------------')
 ##      ----------------------------------------------------------------------------------------
 import os
 import time
@@ -81,7 +81,7 @@ if __name__ =='__main__':
         if not exists(str(args.Output_Data)):
                         cfgvars.File2 = str(args.Output_Data)
         else:
-                        print "Output File already exists!  Appending time to directory name to prevent overwrite."
+                        print("Output File already exists!  Appending time to directory name to prevent overwrite.")
                         cfgvars.File2 = str(args.Output_Data) + str(int(time.time()))
         if args.F:	
 		cfgvars.ReadType = '-f'
@@ -353,8 +353,8 @@ def Alignment(ReadsIn, ReadType, Seed):
 	        for line in SAMIN1:
 	                line = line.split('\t')
 	                if line[2] != '*' and True not in [i[:5] == 'MD:Z:' for i in line]:  ####REMOVE THIS HACK LATER
-                                print "WARNING, SAM entry contains mapping Data but no Mismatch Tag: Read ignored"
-                                print line  
+                                print("WARNING, SAM entry contains mapping Data but no Mismatch Tag: Read ignored")
+                                print(line)
                         else:
                                 Name = line[0]
                                 if Name[:3] in SamHeaders:
@@ -446,23 +446,20 @@ def Alignment(ReadsIn, ReadType, Seed):
 
 def IterateAlignments(File):
         if cfgvars.ReadType == '-f':
-                print "%s reads in input file." % Countreads(File, 'F')
+                print("%s reads in input file." % Countreads(File, 'F'))
 		Alignment(File, '-f', cfgvars.Seed)
 	else:
-                print "%s reads in input file." % Countreads(File, 'Q')
+                print("%s reads in input file." % Countreads(File, 'Q'))
 		Alignment(File, '-q', cfgvars.Seed)
         ReadsRemaining = Countreads('TEMPREADS', 'Q')
-        print "%s reads remaining to be aligned after first iteration." % (ReadsRemaining)
+        print("%s reads remaining to be aligned after first iteration." % (ReadsRemaining))
         n = 1
         while ReadsRemaining > 0:
             n += 1
             Alignment('TEMPREADS', '-q', cfgvars.Seed)
             ReadsRemaining = Countreads('TEMPREADS', 'Q')
-            print "%s reads remaining to be aligned after %s iterations." % (ReadsRemaining, n)
+            print("%s reads remaining to be aligned after %s iterations." % (ReadsRemaining, n))
             
-            # garbage collection
-            os.remove('TEMPREADS')
-            gc.collect()
     
 ##      ----------------------------------------------------------------------------------------
 ##      ReportResults() Analyses the results from all the Bowtie calls and collates all the results 
@@ -534,15 +531,15 @@ if __name__ == '__main__':
                                 ChunkedReads.close()
                                 ChunkNum += 1
                                 ReportDict = {}
-                                print "Begining alignments on Chunk Number %s" % ChunkNum
+                                print("Begining alignments on Chunk Number %s" % ChunkNum)
                                 IterateAlignments('ChunkedReads')
-                                print "Appending Results from Chunk Number %s to: " % ChunkNum, str(cfgvars.File2)
+                                print("Appending Results from Chunk Number %s to: " % ChunkNum, str(cfgvars.File2))
                                 ReportResults()
         else:
                 ReportDict = {}
-                print "Begining alignments"
+                print("Begining alignments")
                 IterateAlignments(cfgvars.File1)
-                print "Reporting Results to: ", str(cfgvars.File2)
+                print("Reporting Results to: ", str(cfgvars.File2))
                 ReportResults()
         if cfgvars.Compile:
                 if cfgvars.Aligner =='bwa':
@@ -554,13 +551,13 @@ if __name__ == '__main__':
 			cfgvars.File2 = 'DeDuped_' + cfgvars.File2
 		else:
 			pass
-		print "Compiling Results and saving into individual outputs"
+		print("Compiling Results and saving into individual outputs")
 		if args.Output_Dir and cfgvars.Compile:
                         if not exists(str(args.Output_Dir)):
                                 cfgvars.Output_Dir = str(args.Output_Dir) + '/'
                                 makedirs(cfgvars.Output_Dir)
                         else:
-                                print "Output Directory already exists!  Appending time to directory name to prevent overwrite."
+                                print("Output Directory already exists!  Appending time to directory name to prevent overwrite.")
                                 cfgvars.Output_Dir = str(args.Output_Dir) + str(int(time.time())) + '/'
                                 makedirs(cfgvars.Output_Dir)
                 else:
@@ -570,7 +567,7 @@ if __name__ == '__main__':
                                 makedirs(cfgvars.Output_Dir + 'BED_Files/')
                         else:
                                 makedirs(cfgvars.Output_Dir + 'BED_Files_' + str(int(time.time())) + '/')
-                                print "WARNING: BED Folder already present in output directory!"
+                                print("WARNING: BED Folder already present in output directory!")
                 else:
                         pass
                 if args.CoVaMa:
@@ -581,7 +578,7 @@ if __name__ == '__main__':
                 ResultsSort(cfgvars.File2)
 
 finish = time.time()
-print "Time to complete in seconds: ", int(finish - start)
+print("Time to complete in seconds: ", int(finish - start))
 
 ##      ----------------------------------------------------------------------------------------
 ##      End
