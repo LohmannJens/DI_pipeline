@@ -26,7 +26,7 @@ def main(fasta_name, mutation_freq):
             if val < mutation_freq:
                 # choose a random nucleotide that's different.
                 seq[i] = choice([x for x in "ACTG" if x != s.upper()])
-        print ">%s\n%s" % (header, "".join(seq))
+        print(">%s\n%s" % (header, "".join(seq)))
 
 if __name__ == "__main__":
     main(sys.argv[1], float(sys.argv[2]))
