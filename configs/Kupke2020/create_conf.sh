@@ -15,7 +15,7 @@ do
     head -n 1 "$file_to_edit" > "$temp_file"
 
 # Use 'echo' to add the new second line
-    echo params.accessionNumber = ${acc} >> "$temp_file"
+    echo params.accessionNumber = \"${acc}\" >> "$temp_file"
 
 # Use 'tail' to copy the rest of the lines from the original file
     tail -n +3 "$file_to_edit" >> "$temp_file"
