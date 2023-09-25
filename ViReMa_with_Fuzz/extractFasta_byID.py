@@ -10,8 +10,8 @@ fastafile = sys.argv[2]
 
 try:
     ids=open(ListOfIds, 'r')
-except IOError:
-    print("File error: ",ListOfIds)
+except IOError, e:
+    print "File error: ",ListOfIds
     pass
 
 
@@ -60,12 +60,12 @@ for i in req:
         subset.write(seqIDmap[i].strip()+"\n")
         subset.write(bank[seqIDmap[i]].strip()+"\n")
     except KeyError:
-        print(i, "not found in fasta")
+        print i, "not found in fasta"
         nbNF+=1
 
 subset.close()
 
-print()
-print(nbNF, "IDs (listed above) from",listName, "have not been found in", faName)
-print()
-print("the Subset fasta file", subsetName, "is now created")
+print
+print nbNF, "IDs (listed above) from",listName, "have not been found in", faName
+print
+print "the Subset fasta file", subsetName, "is now created"

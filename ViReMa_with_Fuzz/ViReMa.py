@@ -19,12 +19,12 @@
 ##      THE SOFTWARE.
 ##
 ##      ----------------------------------------------------------------------------------------
-print('\n-------------------------------------------------------------------------------------------')
-print('ViReMa Version 0.9 - written by Andrew Routh')
-print('Last modified 31/01/2014')
-print('-------------------------------------------------------------------------------------------')
+print '\n-------------------------------------------------------------------------------------------'
+print 'ViReMa Version 0.9 - written by Andrew Routh'
+print 'Last modified 31/01/2014'
+print '-------------------------------------------------------------------------------------------'
 ##      ----------------------------------------------------------------------------------------
-import os
+
 import time
 start = time.time()
 from subprocess import call
@@ -36,8 +36,6 @@ from os import makedirs
 from os.path import exists
 import sys
 
-import gc
-
 ##      -------------------------------------------------------------------------------------------
 ##      Take arguments from command line, and send them to the config file for cross-module access
 ##      -------------------------------------------------------------------------------------------
@@ -48,16 +46,16 @@ if __name__ =='__main__':
         parser.add_argument("--Host_Index", help="Host genome reference index key, e.g. d_melanogaster_fb5_22")
         parser.add_argument("Input_Data", help= "File containing single reads in FASTQ format")
         parser.add_argument("Output_Data", help= "Destination file for results")
-        parser.add_argument("--N", help= "Number of mismatches tolerated in mapped seed and in mapped segments. Default is 1.")
-        parser.add_argument("--Seed", help="Number of nucleotides in the Seed region. Default is 25.")
-        parser.add_argument("--ThreePad", help="Number of nucleotides not allowed to have mismatches at 3' end of segment. Default is 5.")
-        parser.add_argument("--FivePad", help="Number of nucleotides not allowed to have mismatches at 5' end of segment. Default is 5.")
-        parser.add_argument("--X", help="Number of nucleotides not allowed to have mismatches at 3' end and 5' of segment. Overrides seperate ThreePad and FivePad settings. Default is 5.")
+	parser.add_argument("--N", help= "Number of mismatches tolerated in mapped seed and in mapped segments. Default is 1.")
+	parser.add_argument("--Seed", help="Number of nucleotides in the Seed region. Default is 25.")
+	parser.add_argument("--ThreePad", help="Number of nucleotides not allowed to have mismatches at 3' end of segment. Default is 5.")
+	parser.add_argument("--FivePad", help="Number of nucleotides not allowed to have mismatches at 5' end of segment. Default is 5.")
+	parser.add_argument("--X", help="Number of nucleotides not allowed to have mismatches at 3' end and 5' of segment. Overrides seperate ThreePad and FivePad settings. Default is 5.")
         parser.add_argument("--Host_Seed", help="Number of nucleotides in the Seed region when mapping to the Host Genome. Default is same as Seed value.")
         parser.add_argument("-F", action='store_true', help="Select '-F' if data is in FASTA format fasta. Default is FASTQ.")
         parser.add_argument("--Defuzz", help="Choose how to defuzz data:  '5' to report at 5' end of fuzzy region, '3' to report at 3' end, or '0' to report in centre of fuzzy region. Default is no fuzz handling (similar to choosing Right - see Routh et al).")
         parser.add_argument("--MaxFuzz", help="Select maximum allowed length of fuzzy region. Recombination events with longer fuzzy regions will not be reported. Default is Seed Length.")
-        parser.add_argument("-DeDup", action='store_true', help="Remove potential PCR duplicates. Default is 'off'.")
+	parser.add_argument("-DeDup", action='store_true', help="Remove potential PCR duplicates. Default is 'off'.")
         parser.add_argument("-ReadNamesEntry", action='store_true', help="Append Read Names contributing to each compiled result. Default is off.")
         parser.add_argument("--MicroInDel_Length", help= "Size of MicroInDels - these are common artifacts of cDNA preparation.  See Routh et al JMB 2012. Default size is 0)")
         parser.add_argument("--Compound_Handling", help= "Select this option for compound recombination event mapping (see manual for details). Enter number of nucleotides to map (must be less than Seed, and greater than number of nts in MicroInDel). Default is off.")
@@ -65,7 +63,7 @@ if __name__ =='__main__':
         parser.add_argument("--Output_Dir", help= "Enter a directory name that all compiled output files will be saved in.")
         parser.add_argument("--p", help= "Enter number of available processors. Default is 1.")
         parser.add_argument("--Chunk", help= "Enter number of reads to process together.")
-        parser.add_argument("--Aligner", help="Enter Alignment Software: 'bwa', 'bowtie'. Default is bowtie.")
+	parser.add_argument("--Aligner", help="Enter Alignment Software: 'bwa', 'bowtie'. Default is bowtie.")
         parser.add_argument("-No_Compile", action='store_true', help= "Select this option if you do not wish to compile the results file into.  Maybe useful when combining results from different datasets.")
         parser.add_argument("-BED", action='store_true', help= "Output recombination data into BED files.")
         parser.add_argument("-CoVaMa", action='store_true', help= "Make CoVaMa output data.")
@@ -81,20 +79,20 @@ if __name__ =='__main__':
         if not exists(str(args.Output_Data)):
                         cfgvars.File2 = str(args.Output_Data)
         else:
-                        print("Output File already exists!  Appending time to directory name to prevent overwrite.")
+                        print "Output File already exists!  Appending time to directory name to prevent overwrite."
                         cfgvars.File2 = str(args.Output_Data) + str(int(time.time()))
         if args.F:	
-                cfgvars.ReadType = '-f'
-        else: 
-                cfgvars.ReadType = '-q'
+		cfgvars.ReadType = '-f'
+	else: 
+		cfgvars.ReadType = '-q'
         if args.Seed:
                 cfgvars.Seed = int(args.Seed)
         else:
                 cfgvars.Seed = 25
-        if args.N:
-                cfgvars.Mismatches = int(args.N)
-        else:
-                cfgvars.Mismatches = 1
+	if args.N:
+		cfgvars.Mismatches = int(args.N)
+	else:
+		cfgvars.Mismatches = 1
         if args.Compound_Handling:
                 cfgvars.Compound_Handling = str(args.Compound_Handling)
         else:
@@ -103,15 +101,15 @@ if __name__ =='__main__':
                 cfgvars.MicroInDel_Length = int(args.MicroInDel_Length)
         else:
                 cfgvars.MicroInDel_Length = 0
-        if args.ThreePad:
-                cfgvars.ThreePad = int(args.ThreePad)
-        else:
-                cfgvars.ThreePad = 5
-        if args.FivePad:
-                cfgvars.FivePad = int(args.FivePad)
-        else:
-                cfgvars.FivePad = 5
-        if args.X:
+	if args.ThreePad:
+		cfgvars.ThreePad = int(args.ThreePad)
+	else:
+		cfgvars.ThreePad = 5
+	if args.FivePad:
+		cfgvars.FivePad = int(args.FivePad)
+	else:
+		cfgvars.FivePad = 5
+	if args.X:
                 cfgvars.FivePad = int(args.X)
                 cfgvars.ThreePad = int(args.X)
         else:
@@ -125,18 +123,18 @@ if __name__ =='__main__':
         else:
                 cfgvars.FileTag = ''
         if args.Defuzz == '3':
-                cfgvars.Defuzz = 'Right'
-        elif args.Defuzz == '5':
-                cfgvars.Defuzz = 'Left'
-        elif args.Defuzz == '0':
-                cfgvars.Defuzz = 'Centre'
+		cfgvars.Defuzz = 'Right'
+	elif args.Defuzz == '5':
+		cfgvars.Defuzz = 'Left'
+	elif args.Defuzz == '0':
+		cfgvars.Defuzz = 'Centre'
         else:
                 cfgvars.Defuzz = False
         if args.MaxFuzz:
                 cfgvars.MaxFuzz = int(args.MaxFuzz)
         else:
                 cfgvars.MaxFuzz = cfgvars.Seed
-        if args.DeDup:
+	if args.DeDup:
                 cfgvars.DeDup = True
         else:
                 cfgvars.DeDup = False
@@ -145,9 +143,9 @@ if __name__ =='__main__':
         else:
                 cfgvars.ReadNamesEntry = False
         if args.Aligner == 'bwa':
-                cfgvars.Aligner = 'bwa'
-        else:
-                cfgvars.Aligner = 'bowtie'
+		cfgvars.Aligner = 'bwa'
+	else: 
+		cfgvars.Aligner = 'bowtie'
         if args.Chunk:
                 cfgvars.Chunk = str(args.Chunk)
         else:
@@ -183,12 +181,12 @@ if __name__ =='__main__':
 
 def Countreads(File, ReadType):
         with open(File, 'r') as CountReadsIn:
-                NumberofReads = 0
-                for line in CountReadsIn:
-                        if ReadType == "Q":
-                                NumberofReads += 0.25
-                        elif ReadType == "F":
-                                NumberofReads += 0.5
+        	NumberofReads = 0
+        	for line in CountReadsIn:
+                	if ReadType == "Q":
+                        	NumberofReads += 0.25
+                	elif ReadType == "F":
+                        	NumberofReads += 0.5
         return int(NumberofReads)
 
 ##      ------------------------------------------------------------------------------------------------------------
@@ -204,10 +202,10 @@ def FindReadMapping(output, CurrentSeed, Seed):
 		#output[9] is the query sequence
                         return "TOOSMALL", "U", "*", "*", output[9], "N"
                 else:
-                        MismatchTag = [i[5:] for i in output if 'MD:Z:' in i][0]
-                        Align = findall(r"[^\W\d_]+|\d+", MismatchTag)	
+			MismatchTag = [i[5:] for i in output if 'MD:Z:' in i][0]
+			Align = findall(r"[^\W\d_]+|\d+", MismatchTag)	
 			#output[12] is the default mismatches field in bowtie
-                        flag = bin(int(output[1]))
+			flag = bin(int(output[1]))
 			#This is the bitwise FLAG from the standard .SAM format.  A flag of '4' means the read is unmapped.
                         if len(flag) > 6 and flag[-5] == '1':		
 			#A flag of '16' means the read mapped to the reference in the reverse direction and so needs to be reverse complented to regain to the original read
@@ -226,26 +224,26 @@ def FindReadMapping(output, CurrentSeed, Seed):
                                         else:
                                                 return "NONE", Code, "*", "*", output[9][1:], "N", output[9], output[10]
                         else:
-                                        #Here, we find the number of mapped nucleotides including allowed mismatches (note, mismatches are not allowed at the ends of a segment as determined by the 'ThreePad' and 'FivePad' variables
+					#Here, we find the number of mapped nucleotides including allowed mismatches (note, mismatches are not allowed at the ends of a segment as determined by the 'ThreePad' and 'FivePad' variables
                                         if cfgvars.Mismatches >= 2 and len(Align) > 3 and int(Align[4]) >= cfgvars.ThreePad:
-                                                #Means if two mismatches are allowed, and if two mismatches are found, and if none of these mismatches are disqualifying
-                                                if Align[2] == '0':
+						#Means if two mismatches are allowed, and if two mismatches are found, and if none of these mismatches are disqualifying
+                                        	if Align[2] == '0':
 							#Means there are two adjacent but allowed mismatches
-                                                        Code = '%sM2X%sM' % (Align[0], Align[4])
-                                                else:
-                                                        #Means there are two non-adjacent and allowed mismatches
-                                                        Code = '%sM1X%sM1X%sM' % (Align[0], Align[2], Align[4])
-                                                MappedLength = int(Align[0]) + int(Align[2]) + int(Align[4]) + 2
-                                                #Length of the three mapped sections plus the mismatches
+							Code = '%sM2X%sM' % (Align[0], Align[4])
+						else:
+							#Means there are two non-adjacent and allowed mismatches
+							Code = '%sM1X%sM1X%sM' % (Align[0], Align[2], Align[4])
+					        MappedLength = int(Align[0]) + int(Align[2]) + int(Align[4]) + 2
+						#Length of the three mapped sections plus the mismatches
                                         elif cfgvars.Mismatches >= 1 and len(Align) > 1 and int(Align[2]) >= cfgvars.ThreePad:
 						#Means if one mismatch is allowed, and if one mismatch is found and it is not disqualifying
                                                 MappedLength = int(Align[0]) + int(Align[2]) + 1
-                                                Code = '%sM1X%sM' % (Align[0], Align[2])
+						Code = '%sM1X%sM' % (Align[0], Align[2])
                                         else:
 						#Means no mismatches were found
                                                 MappedLength = int(Align[0])
-                                                Code = '%sM' % (str(MappedLength))
-                                        if int(MappedLength) < CurrentSeed:
+						Code = '%sM' % (str(MappedLength))
+					if int(MappedLength) < CurrentSeed:
                                                 #After accounting for disallowed mismatches, the remaining mapped nucleotides are now shorter than the required Seed Length
                                                 #Therefore, there is no confident mapping.
                                                 Code = '%sX' % (output[9][0])
@@ -325,18 +323,18 @@ def FindReadMapping(output, CurrentSeed, Seed):
 def Alignment(ReadsIn, ReadType, Seed):
 	####  Function AddToReportDict() adds details of any alignments, mismatches or trimmed nucleotide to temporary dictionary.
 	####  Entries are annotated accordingly to the sequence read name, therefore read names MUST be unique.  Take care when using paired-end reads.
-        def AddToReportDict(Dict, Namee):
-                if Name in Dict:
-                        Dict[Namee] += [Mapping[0:5]]
-                else:
-                        Dict[Namee] = [Mapping[0:5]]
-        SamHeaders = ['@HD', '@SQ', '@RG', '@PG', '@CO']
+	def AddToReportDict(Dict, Namee):
+		if Name in Dict:
+			Dict[Namee] += [Mapping[0:5]]
+		else:
+			Dict[Namee] = [Mapping[0:5]]
+	SamHeaders = ['@HD', '@SQ', '@RG', '@PG', '@CO']
 	#Run Bowtie/BWA using Virus Genome.   Bowtie/BWA must be in your PATH.  Remove the --mm and -p options if operating in Windows or cygwin.
         if cfgvars.Aligner == 'bwa':
-                with open('TEMPSAI1', 'w') as outfilesai:
-                        call(['bwa', 'aln', '-k', str(cfgvars.Mismatches), '-l', str(Seed), '-n', '10000', '-o', '0', '-t', cfgvars.Threads, cfgvars.Lib1, ReadsIn], stdout = outfilesai)
-                with open('TEMPSAM1', 'w') as outfilesam:
-                        call(['bwa', 'samse', cfgvars.Lib1, 'TEMPSAI1', ReadsIn], stdout = outfilesam)
+		with open('TEMPSAI1', 'w') as outfilesai:
+			call(['bwa', 'aln', '-k', str(cfgvars.Mismatches), '-l', str(Seed), '-n', '10000', '-o', '0', '-t', cfgvars.Threads, cfgvars.Lib1, ReadsIn], stdout = outfilesai)
+		with open('TEMPSAM1', 'w') as outfilesam:
+			call(['bwa', 'samse', cfgvars.Lib1, 'TEMPSAI1', ReadsIn], stdout = outfilesam)
         else:
                 if cfgvars.Nomm:
                         call(['bowtie', ReadType, '-n', str(cfgvars.Mismatches), '-l', str(Seed), '-e', '100000', '--quiet', '-p', cfgvars.Threads, '--best', '-S', '--sam-nohead', cfgvars.Lib1, ReadsIn, 'TEMPSAM1'])
@@ -344,17 +342,17 @@ def Alignment(ReadsIn, ReadType, Seed):
                         call(['bowtie', ReadType, '-n', str(cfgvars.Mismatches), '-l', str(Seed), '-e', '100000', '--quiet', '--mm', '-p', cfgvars.Threads, '--best', '-S', '--sam-nohead', cfgvars.Lib1, ReadsIn, 'TEMPSAM1'])
         NumHostReads = 0
         with open('TEMPSAM1','r') as SAMIN1:
-                TempReads = open('TEMPREADS', 'w')
-                if cfgvars.Lib2:
-        		#If using two genomes, open a new file to write any reads that did not map to virus genome
-                        HostAttemptReads = open("TEMPREADS2", "w")
-                else:
-                        pass
-                for line in SAMIN1:
-                        line = line.split('\t')
-                        if line[2] != '*' and True not in [i[:5] == 'MD:Z:' for i in line]:  ####REMOVE THIS HACK LATER
-                                print("WARNING, SAM entry contains mapping Data but no Mismatch Tag: Read ignored")
-                                print(line)
+	        TempReads = open('TEMPREADS', 'w')
+	        if cfgvars.Lib2:
+			#If using two genomes, open a new file to write any reads that did not map to virus genome
+	                HostAttemptReads = open("TEMPREADS2", "w")
+	        else:
+	                pass
+	        for line in SAMIN1:
+	                line = line.split('\t')
+	                if line[2] != '*' and True not in [i[:5] == 'MD:Z:' for i in line]:  ####REMOVE THIS HACK LATER
+                                print "WARNING, SAM entry contains mapping Data but no Mismatch Tag: Read ignored"
+                                print line  
                         else:
                                 Name = line[0]
                                 if Name[:3] in SamHeaders:
@@ -446,20 +444,19 @@ def Alignment(ReadsIn, ReadType, Seed):
 
 def IterateAlignments(File):
         if cfgvars.ReadType == '-f':
-                print("%s reads in input file." % Countreads(File, 'F'))
-                Alignment(File, '-f', cfgvars.Seed)
-        else:
-                print("%s reads in input file." % Countreads(File, 'Q'))
-                Alignment(File, '-q', cfgvars.Seed)
+                print "%s reads in input file." % Countreads(File, 'F')
+		Alignment(File, '-f', cfgvars.Seed)
+	else:
+                print "%s reads in input file." % Countreads(File, 'Q')
+		Alignment(File, '-q', cfgvars.Seed)
         ReadsRemaining = Countreads('TEMPREADS', 'Q')
-        print("%s reads remaining to be aligned after first iteration." % (ReadsRemaining))
+        print "%s reads remaining to be aligned after first iteration." % (ReadsRemaining)
         n = 1
         while ReadsRemaining > 0:
             n += 1
             Alignment('TEMPREADS', '-q', cfgvars.Seed)
             ReadsRemaining = Countreads('TEMPREADS', 'Q')
-            print("%s reads remaining to be aligned after %s iterations." % (ReadsRemaining, n))
-            
+            print "%s reads remaining to be aligned after %s iterations." % (ReadsRemaining, n)
     
 ##      ----------------------------------------------------------------------------------------
 ##      ReportResults() Analyses the results from all the Bowtie calls and collates all the results 
@@ -486,12 +483,12 @@ def ReportResults():
                         Code.append(i[1])
                 elif i[0] == 'NONE':
                         Trimmednucs += i[1][:-1]
-                else:
-                        pass
-                Trimmednucs += i[4]
-                if len(Trimmednucs) > 0:
-                        FinalAlignment.append(Trimmednucs)
-                        Code.append("%sU" % (str(len(Trimmednucs))))
+            	else:
+			pass
+            Trimmednucs += i[4]
+            if len(Trimmednucs) > 0:
+			FinalAlignment.append(Trimmednucs)
+            		Code.append("%sU" % (str(len(Trimmednucs))))
             else:
                     pass
             #FinalAlignment.append(str(Code))
@@ -531,33 +528,33 @@ if __name__ == '__main__':
                                 ChunkedReads.close()
                                 ChunkNum += 1
                                 ReportDict = {}
-                                print("Begining alignments on Chunk Number %s" % ChunkNum)
+                                print "Begining alignments on Chunk Number %s" % ChunkNum
                                 IterateAlignments('ChunkedReads')
-                                print("Appending Results from Chunk Number %s to: " % ChunkNum, str(cfgvars.File2))
+                                print "Appending Results from Chunk Number %s to: " % ChunkNum, str(cfgvars.File2)
                                 ReportResults()
         else:
                 ReportDict = {}
-                print("Begining alignments")
+                print "Begining alignments"
                 IterateAlignments(cfgvars.File1)
-                print("Reporting Results to: ", str(cfgvars.File2))
+                print "Reporting Results to: ", str(cfgvars.File2)
                 ReportResults()
         if cfgvars.Compile:
                 if cfgvars.Aligner =='bwa':
-                        cfgvars.RefsLib1, cfgvars.RefsLib2, cfgvars.Genes = ExtractRefDataBWA()
+			cfgvars.RefsLib1, cfgvars.RefsLib2, cfgvars.Genes = ExtractRefDataBWA()
                 else:
-                        cfgvars.RefsLib1, cfgvars.RefsLib2, cfgvars.Genes = ExtractRefData()
+			cfgvars.RefsLib1, cfgvars.RefsLib2, cfgvars.Genes = ExtractRefData()
                 if cfgvars.DeDup:
-                        UniquifyReport(cfgvars.File2, 'DeDuped_' + cfgvars.File2)
-                        cfgvars.File2 = 'DeDuped_' + cfgvars.File2
-                else:
-                        pass
-                print("Compiling Results and saving into individual outputs")
-                if args.Output_Dir and cfgvars.Compile:
+			UniquifyReport(cfgvars.File2, 'DeDuped_' + cfgvars.File2)
+			cfgvars.File2 = 'DeDuped_' + cfgvars.File2
+		else:
+			pass
+		print "Compiling Results and saving into individual outputs"
+		if args.Output_Dir and cfgvars.Compile:
                         if not exists(str(args.Output_Dir)):
                                 cfgvars.Output_Dir = str(args.Output_Dir) + '/'
                                 makedirs(cfgvars.Output_Dir)
                         else:
-                                print("Output Directory already exists!  Appending time to directory name to prevent overwrite.")
+                                print "Output Directory already exists!  Appending time to directory name to prevent overwrite."
                                 cfgvars.Output_Dir = str(args.Output_Dir) + str(int(time.time())) + '/'
                                 makedirs(cfgvars.Output_Dir)
                 else:
@@ -567,7 +564,7 @@ if __name__ == '__main__':
                                 makedirs(cfgvars.Output_Dir + 'BED_Files/')
                         else:
                                 makedirs(cfgvars.Output_Dir + 'BED_Files_' + str(int(time.time())) + '/')
-                                print("WARNING: BED Folder already present in output directory!")
+                                print "WARNING: BED Folder already present in output directory!"
                 else:
                         pass
                 if args.CoVaMa:
@@ -578,7 +575,7 @@ if __name__ == '__main__':
                 ResultsSort(cfgvars.File2)
 
 finish = time.time()
-print("Time to complete in seconds: ", int(finish - start))
+print "Time to complete in seconds: ", int(finish - start)
 
 ##      ----------------------------------------------------------------------------------------
 ##      End

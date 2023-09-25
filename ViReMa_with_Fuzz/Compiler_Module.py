@@ -20,10 +20,10 @@
 ##
 ##      -------------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    print('\n-------------------------------------------------------------------------------------------')
-    print('ViReMa_0.9 - Viral Recombination Mapper - Compilation Module, with CoVaMa Option')
-    print('Last modified Feb 2016')
-    print('-------------------------------------------------------------------------------------------')
+    print '\n-------------------------------------------------------------------------------------------'
+    print 'ViReMa_0.9 - Viral Recombination Mapper - Compilation Module, with CoVaMa Option'
+    print 'Last modified Feb 2016'
+    print '-------------------------------------------------------------------------------------------'
 
 import ConfigViReMa as cfgvars
 from re import finditer
@@ -82,7 +82,7 @@ def Compound_Handling_Script(Donor, DonorSite, Insertion, AcceptorSite, uDelDict
 ##      ----------------------------------------------------------------------------------------------------------
 
 def UniquifyReport(FileIn, FileOut):
-        print("Removing potential PCR duplicates...")
+        print "Removing potential PCR duplicates..."
         TempSet = set()
         Dict = []
         n = 0
@@ -99,7 +99,7 @@ def UniquifyReport(FileIn, FileOut):
                                 TempSet.add(x[1])
                         n += 1
                         x = InputData.readline()
-                print("Total of %s reads in original dataset" % n)
+                print "Total of %s reads in original dataset" % n
         with open(FileOut, 'w') as DeDupedData:
                 n = 0
                 DeDupedData.write(CLE)
@@ -107,7 +107,7 @@ def UniquifyReport(FileIn, FileOut):
                 for i in Dict:
                         DeDupedData.write(i)
                         n += 1
-                print("%s reads remaining after removing potential PCR duplicates" % n)
+                print "%s reads remaining after removing potential PCR duplicates" % n
 
 ##      ----------------------------------------------------------------------------------------
 ##      Function BedGraph_Plot() will find regions deleted or duplicated due to recombination and return
@@ -197,7 +197,7 @@ def ExtractRefData():
         from subprocess import check_output
         cfgvars.RefsLib1 = set()
         cfgvars.RefsLib2 = set()
-        print("Extracting Virus Gene Names...")
+        print "Extracting Virus Gene Names..."
         z = check_output(['bowtie-inspect', '-a', '1000000', cfgvars.Lib1]).split()
         cfgvars.Genes = {}
         def RefsAppend(Lib, i):
@@ -216,7 +216,7 @@ def ExtractRefData():
                                 Gene = "".join(Temp)
                                 cfgvars.Genes[Name] = Gene
         if cfgvars.Lib2:
-                        print("Extracting Host Gene Names...")
+                        print "Extracting Host Gene Names..."
                         z = check_output(['bowtie-inspect', '-a', '1000000', cfgvars.Lib2]).split()
                         for i in z:
                                 if i[0] == '>':
@@ -229,7 +229,7 @@ def ExtractRefData():
                                                 cfgvars.Genes[Name] = Gene
         else:
                         pass
-        print("Finished extracting gene data")
+        print "Finished extracting gene data"
         return cfgvars.RefsLib1, cfgvars.RefsLib2, cfgvars.Genes
 
 ##      -------------------------------------------------------------------------------------------------------
@@ -242,7 +242,7 @@ def ExtractRefDataBWA():
         cfgvars.RefsLib1 = []
         cfgvars.RefsLib2 = []
         cfgvars.Genes = {}
-        print("Extracting Virus Gene Data...")
+        print "Extracting Virus Gene Data..."
         with open(cfgvars.Lib1,'r') as FASTAIN:
                 for line in FASTAIN:
                         if line[0] == '>':
@@ -257,7 +257,7 @@ def ExtractRefDataBWA():
                                                 cfgvars.Genes[Name] = line.rstrip()
 
         if cfgvars.Lib2:
-                print("Extracting Host Gene Data...")
+                print "Extracting Host Gene Data..."
                 with open(cfgvars.Lib2,'r') as FASTAIN:
                         for line in FASTAIN:
                                 if line[0] == '>':
@@ -270,7 +270,7 @@ def ExtractRefDataBWA():
                                                         cfgvars.Genes[Name] += line.rstrip()
                                                 else:
                                                         cfgvars.Genes[Name] = line.rstrip()
-        print("Finished extracting gene data")
+        print "Finished extracting gene data"
         return cfgvars.RefsLib1, cfgvars.RefsLib2, cfgvars.Genes
     
 ##      -------------------------------------------------------------------------------------------
@@ -987,7 +987,7 @@ def ResultsSort(File1):
                         pass
                     
         ##      Take final Dictionaries of recombination events are write out to files
-        print("Writing sorted results to individual output files...")
+        print "Writing sorted results to individual output files..."
         WriteFinalDict(RecDicts, 'Recs')
         if cfgvars.MicroInDel_Length > 0:
                 WriteFinalDict(uDelDicts, 'uDel')
@@ -998,23 +998,23 @@ def ResultsSort(File1):
         WriteFinalDict(SubDicts, 'Sub')
 
         ##      Print summary
-        print("---------------------------------------------------------------------------------------------------------------------")
-        print("Total of %s reads have been analysed:" % Totalcount)
-        print("%s were single mapping reads with pads." % Padcount)
-        print("%s Straight-forward Recombination Events detected"% RecombCount)
-        print("of which %s were Viral Recombinations, %s were Host Recombinations and %s were Virus-to-Host Recombinations" % (ViralRecombinationCount, HostRecombinationCount, ViraltoHostRecombinationCount))
+        print "---------------------------------------------------------------------------------------------------------------------"
+        print "Total of %s reads have been analysed:" % Totalcount
+        print "%s were single mapping reads with pads." % Padcount
+        print "%s Straight-forward Recombination Events detected"% RecombCount
+        print "of which %s were Viral Recombinations, %s were Host Recombinations and %s were Virus-to-Host Recombinations" % (ViralRecombinationCount, HostRecombinationCount, ViraltoHostRecombinationCount)
         if cfgvars.MicroInDel_Length > 0:
-                print("%s were MicroIndels below a threshold of less than or equal to %s nucleotides." % (uCount, cfgvars.MicroInDel_Length))
+                print "%s were MicroIndels below a threshold of less than or equal to %s nucleotides." % (uCount, cfgvars.MicroInDel_Length)
         else:
                 pass
-        print("%s UnIdentified Insertion Events." % InsCount)
-        print("%s Nucleotide Subsitution events, including mismatches that preserve the gene length." % SubCount)
+        print "%s UnIdentified Insertion Events." % InsCount
+        print "%s Nucleotide Subsitution events, including mismatches that preserve the gene length." % SubCount
         if cfgvars.Compound_Handling:
-                print("%s Compound Recombination Events detected." % CompoundCount)
+                print "%s Compound Recombination Events detected." % CompoundCount
         else:
                 pass
-        print("%s events were Unknown or Ambiguous Recombination Events." % UnknownRecombinationCount)
-        print("%s reads were completely unmapped." % UnmappedReadsCount)
+        print "%s events were Unknown or Ambiguous Recombination Events." % UnknownRecombinationCount
+        print "%s reads were completely unmapped." % UnmappedReadsCount
 
         #Close all output files and finish
         if cfgvars.CoVaMa:
@@ -1149,17 +1149,17 @@ if __name__ == '__main__':
                         cfgvars.Output_Dir = str(args.Output_Dir) + '/'
                         makedirs(cfgvars.Output_Dir)
                 else:
-                        print("Output Directory already exists!  Appending time to directory name to prevent overwrite.")
+                        print "Output Directory already exists!  Appending time to directory name to prevent overwrite."
                         cfgvars.Output_Dir = str(args.Output_Dir) + str(int(time.time())) + '/'
                         makedirs(cfgvars.Output_Dir)
         else:
-                pass
+                passs
         if cfgvars.BED:
                 if not exists(cfgvars.Output_Dir + 'BED_Files/'):
                         makedirs(cfgvars.Output_Dir + 'BED_Files/')
                 else:
                         makedirs(cfgvars.Output_Dir + 'BED_Files_' + str(int(time.time())) + '/')
-                        print("WARNING: BED Folder already present in output directory!")
+                        print "WARNING: BED Folder already present in output directory!"
         else:
                 pass
         if args.CoVaMa:
@@ -1167,14 +1167,14 @@ if __name__ == '__main__':
                 cfgvars.Named_Output = open(cfgvars.Output_Dir + cfgvars.FileTag + "CoVaMa_Output.txt", "w")
         else:
                 cfgvars.CoVaMa = False
-        print("Finding reference gene data using Bowtie-Inspect")
+        print "Finding reference gene data using Bowtie-Inspect"
         cfgvars.RefsLib1, cfgvars.RefsLib2, cfgvars.Genes = ExtractRefData()
         if cfgvars.DeDup:
                 UniquifyReport(File1, 'DeDuped_' + File1)
                 File1 = 'DeDuped_' + File1
         else:
                 pass
-        print("Sorting Results and saving into individual outputs")
+        print "Sorting Results and saving into individual outputs"
         ResultsSort(File1)
 
 ##      -------------------------------------------------------------------------------------------
