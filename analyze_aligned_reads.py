@@ -15,7 +15,7 @@ DATASET_STRAIN_DICT = dict({
     "Mendes2021": "WSN",
     "Wang2023": "PR8",
     "Lui2019": "Anhui",
-    "Wang2020": "PR8",
+    "Wang2018": "PR8",
     "Penn2022": "Turkey",
     "Kupke2020": "PR8"
 })
@@ -66,6 +66,16 @@ SEGMENT_DICTS = dict({
         "CY115115.1": "NS"
     }),
     "WSN": dict({
+        "PB2": "PB2",
+        "PB1": "PB1",
+        "PA": "PA",
+        "HA": "HA",
+        "NP": "NP",
+        "NA": "NA",
+        "M": "M",
+        "NS": "NS"
+    }),
+    "_WSN": dict({
         "CY034139.1": "PB2",
         "CY034138.1": "PB1",
         "CY034137.1": "PA",
@@ -131,7 +141,7 @@ def analyse_mapped_reads(author, acc_num):
     df = pd.DataFrame(df_data)
 
     out_file = acc_num + "_mapped_reads_per_segment.csv"
-    out_path = os.path.join(path, out_file)
+    out_path = os.path.join("results", args.author, "final", out_file)
     df.to_csv(out_path, index=False)
 
 
